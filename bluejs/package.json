@@ -10,6 +10,7 @@
   "author": "Bruno",
   "license": "ISC",
   "dependencies": {
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.12",
+    "prompt-sync": "^4.2.0"
   }
 }

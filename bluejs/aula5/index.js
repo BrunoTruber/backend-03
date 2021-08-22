@@ -22,7 +22,7 @@ if (opcao === 1){
     console.log(`${n1} - ${n2} = ${calc.sub(n1,n2)}`)
 }else if (opcao === 3){
     console.log(`${n1} * ${n2} = ${calc.mult(n1,n2)}`)
-}else if (opcap === 4){
+}else if (opcao === 4){
     console.log(`${n1} / ${n2} = ${calc.divisao(n1,n2)}`)
 }else {
     'Opção invalida'

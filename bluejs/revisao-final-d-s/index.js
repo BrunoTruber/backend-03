@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 });
 
 //GET /filmes - retornar a lista de filmes
-app.get('/filmes',(re, res) => {
+app.get('/filmes', (req, res) => {
   res.send(filmes);
 });
  

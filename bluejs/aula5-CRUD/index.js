@@ -1,15 +1,22 @@
+// Baixar o express no terminal com o comando: npm i express
 
-
-const express = require('express');
-const app = express();
+const express = require('express');// importa o módulo express do node_modules
+const app = express();// cria o nosso objeto app, que vai poder utilizar tudo o que o express possui
 
 app.use(express.json()) // Converter requisiçao para JavaScript Object Notation (JSON)
  
 const port = 3000 // constante para salvar a porta do servidor
 const filmes = [
-  'Capitao America',
-  'Capitã Marvel',
-  'pantera negra'
+  /* {
+    id: 1,
+    nome: "Capitão America",
+    duracao: 160,
+  },
+  {
+    id: 2,
+    nome: "Capitã Marvel",
+    duracao: 200,
+  }, */
 ]
 
 // CRUD - Create[POST] - Read[GET] - Update[PUT] - Delete[DELETE]
@@ -21,11 +28,12 @@ app.get('/', (req, res) => {
 
 //GET /filmes - retornar a lista de filmes
 app.get('/filmes', (req, res) => {
-  res.json({filmes});
+  res.json({filmes});// .json converte nosso array ou objeto para JSON
 });
  
   //GET /filmes/{id} - retorna a lista de filmes pelo ID
 app.get('/filmes/:id', (req, res) => {
+   // Rota com recebimento de parametro (:id)
   const id = req.params.id - 1; //pega o parametro da rota
   const filme = filmes[id] //a variavel filme recebe o parametro e busca na lista filmes
   
@@ -36,7 +44,7 @@ app.get('/filmes/:id', (req, res) => {
 
 // POST - /filmes - Criar um novo filme
 app.post('/filmes', (req, res) => {
-  const filme = req.body.filme;
+  const filme = req.body.filme;// Pego o JSON inteiro do body e insiro na const filme (desse lado é convertido para um obejto "normal" de js)
   // if( filme == 'Matrix'){
   //   res.send(filme)
   // } else {

@@ -7,7 +7,7 @@ app.use(express.json()) // Converter requisiçao para JavaScript Object Notation
  
 const port = 3000 // constante para salvar a porta do servidor
 const filmes = [
-  /* {
+  {
     id: 1,
     nome: "Capitão America",
     duracao: 160,
@@ -16,7 +16,7 @@ const filmes = [
     id: 2,
     nome: "Capitã Marvel",
     duracao: 200,
-  }, */
+  }, 
 ]
 
 // CRUD - Create[POST] - Read[GET] - Update[PUT] - Delete[DELETE]

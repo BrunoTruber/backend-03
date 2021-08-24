@@ -1,0 +1,16 @@
+{
+  "name": "aula7-projeto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "author": "Bruno Truber",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.12",
+    "prompt-sync": "^4.2.0"
+  }
+}

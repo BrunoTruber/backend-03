@@ -1,8 +1,11 @@
+
+
 const express = require('express');
 const app = express();
 
 app.use(express.json()) // Converter requisiçao para JavaScript Object Notation (JSON)
  
+const port = 3000 // constante para salvar a porta do servidor
 const filmes = [
   'Capitao America',
   'Capitã Marvel',
@@ -18,7 +21,7 @@ app.get('/', (req, res) => {
 
 //GET /filmes - retornar a lista de filmes
 app.get('/filmes', (req, res) => {
-  res.send(filmes);
+  res.json({filmes});
 });
  
   //GET /filmes/{id} - retorna a lista de filmes pelo ID
@@ -58,6 +61,10 @@ app.delete('/filmes/:id', (req, res) => {
   filmes[id] = filme
   res.send('filme apagado com sucesso');
 });
-app.listen(3000, () => {
-  console.log('Servidor rodando em http://localhost:3000')
+
+
+// A funçao listen do objeto app serve para "ligar" o nosso back-end ou servir o nosso back-end
+//É obrigatório que essa chamada de funçao esteja sempre no final do nosso ´codigo
+app.listen(3000, () => {//
+  console.log(`Servidor rodando em http://localhost:${port}`)
 });

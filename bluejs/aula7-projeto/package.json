@@ -10,7 +10,10 @@
   "author": "Bruno Truber",
   "license": "ISC",
   "dependencies": {
-    "nodemon": "^2.0.12",
+    "express": "^4.17.1",
     "prompt-sync": "^4.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
   }
 }

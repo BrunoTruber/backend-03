@@ -33,9 +33,9 @@ app.get("/filmes", (req, res) => {
 });
 
 // GET /filmes/{id} - Retornar a lista de filmes pelo ID
-app.get("/filmes/:idFilme", (req, res) => {
+app.get("/filmes/:id", (req, res) => {
   // Rota com recebimento de parametro (:id)
-  const id = +req.params.idFilme;
+  const id = +req.params.id;
   const filme = filmes.find((filme) => filme.id === id);
 
   !filme
@@ -55,7 +55,7 @@ app.post("/filmes", (req, res) => {
   // Pega o último elemento da lista filmes
   const ultimoFilme = filmes[filmes.length - 1];
 
-  console.log(filmes.length)
+  //console.log(filmes.length)
 
   // Testa se a lista não está vazia
   if (filmes.length) { // Se o retorno de filmes.length for 0 faça...  (0 == false)
@@ -73,17 +73,44 @@ app.post("/filmes", (req, res) => {
 
 // PUT - /filmes/{id} - Altera um filme pelo ID
 app.put("/filmes/:id", (req, res) => {
-  const id = req.params.id - 1;
-  const filme = req.body.filme;
-  filmes[id] = filme;
-  res.send("Filme alterado com sucesso!");
+  const id = req.params.id;
+  
+  const filmeIndex = filmes.findIndex(filme => filme.id === id);
+
+  if (filmeIndex < 0) {
+    res.status(404).send({error: 'filme nao encontrado'});
+    return;
+  }
+   
+  const novoFilme = req.body;
+
+  if (!novoFilme || !novoFilme.nome || !novoFilme.duracao) {
+    res.status(400).send({ error: "Filme inválido!" });
+    return;
+  }
+
+  const filme = filmes.find(filme => filme.id === id)
+  
+  novoFilme.id = filme.id 
+
+  filmes[filmeIndex] = novoFilme
+  
+  res.send({message:"Filme alterado com sucesso!"});
 });
 
 // Delete - filmes/{id} - apagar um filme pelo ID
 app.delete("/filmes/:id", (req, res) => {
-  const id = req.params.id - 1;
-  delete filmes[id];
-  res.send("Filme apagado com sucesso!");
+  const id = +req.params.id;
+
+  const filmeIndex = filmes.findIndex(filme => filme.id === id)
+  if (filmeIndex < 0){
+    res.status(404).send({error: 'filme nao encontrado'});
+    return;
+  }
+   
+  filmes.splice(filmeIndex, 1);
+
+  res.send({message: "Ffilme apagad com sucesso!"});
 });
 
 /* 

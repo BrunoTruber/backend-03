@@ -10,11 +10,11 @@ app.get('/', (req, res) => {
     res.send({ info: 'Hello mongo db'});
 });
 
-app.get('/filmes', (req, res) => {
+app.get('/filmes', async (req, res) => {
     const filmes = await filmeSchema.find();
     res.send(filmes);
 })
 
 app.listen(port, () => {
-    console.log(`server cool in http://localhost${port}`)
+    console.log(`server cool in http://localhost:${port}`)
 }); 

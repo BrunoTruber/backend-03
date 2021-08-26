@@ -155,5 +155,5 @@ app.delete('/jogos/:id', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server cool in http://localhost${port}`);
+    console.log(`Server cool in http://localhost:${port}`);
 })

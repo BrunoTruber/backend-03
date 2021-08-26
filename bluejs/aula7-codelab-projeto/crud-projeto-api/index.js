@@ -147,6 +147,7 @@ app.delete('/jogos/:id', (req, res) => {
     }
 
 
+
     jogos.splice(JogoIndex, 1);
 
 

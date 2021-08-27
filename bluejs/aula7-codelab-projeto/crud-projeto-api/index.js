@@ -1,63 +1,11 @@
 //baixar: npm i express
 const express = require("express");// importa o módulo express do nde_modules
+const jogoSchema = require('./models/jogo');
 const app = express();// cria o nosso objeto app, que vai poder utilizar tudo o que o express possui
 
 app.use(express.json());// Converte requisições e repostas para JSON (JavaScript Object Notation)
 
 const port = 3000;
-
-const jogos = [
-    {
-        id: 1,
-        nome: "The Legend of Zelda: Ocarina of Time",
-        imagem: "https://s2.glbimg.com/yV_0o8QppB4pGaoRnv5k45oW1JA=/0x0:695x420/984x0/smart/filters:strip_icc()/s.glbimg.com/po/tt2/f/original/2016/09/27/nintendo-64-20-anos-the-legend-of-zelda-ocarina-of-time.jpg"
-    },
-    {
-        id: 2,
-        nome: "Tony Hawk's Pro Skater 2",
-        imagem: "https://s2.glbimg.com/26R0yT2Dk_W-lTmlCh6Xq66AMJY=/0x0:850x638/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/k/1/Y6JlcIR4Cs0BABE5Rmtg/thps2-3.png"
-    },
-    {
-        id: 3,
-        nome: "Grand Theft Auto IV",
-        imagem: "https://s2.glbimg.com/7ODOiSf9y_Fuv5UcQDPISeVcQpg=/0x0:695x434/984x0/smart/filters:strip_icc()/s.glbimg.com/po/tt2/f/original/2015/07/08/gta-iv-steam1.jpg"
-    },
-    {   
-        id: 4,
-        nome: "SoulCalibur",
-        imagem: "https://s2.glbimg.com/CHiQlb-KUkeUouRfkvANLOHcV4o=/0x0:555x370/984x0/smart/filters:strip_icc()/s.glbimg.com/po/tt2/f/original/2013/11/29/soulcalibur-game-001.jpg"
-    },
-    {
-        id: 5,
-        nome: "Super Mario Galaxy",
-        imagem: "https://s2.glbimg.com/npRJ-WEPP3zEWhr694SHlBuK2ww=/0x0:695x417/984x0/smart/filters:strip_icc()/s.glbimg.com/po/tt2/f/original/2015/03/20/mario-galaxy.jpg"
-    },
-    {
-        id: 6,
-        nome: "Super Mario Galaxy 2",
-        imagem: "https://s2.glbimg.com/7CVjMbiGVJBYwvywH4LCeo8cMpo=/0x0:695x390/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2020/c/P/5EPwo9Q6OB8cdNzpHJqw/evolucao-games-2010-2020-10-super-mario-galaxy-2.jpg"
-    },
-    {   
-        id: 7,
-        nome: "Red Dead Redemption 2",
-        imagem: "https://s2.glbimg.com/05LkMmL7utHLmjaCefLYm1tqIzM=/0x0:1920x1080/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2020/Y/u/4O9gicQly5pkDiZ3tPww/reddead2.jpeg"
-    },
-    {   
-        id: 8,
-        nome: "Grand Theft Auto V",
-        imagem: "https://s2.glbimg.com/1H0VJPjSTx0bePl7Ulxs94I2knQ=/0x0:3840x2160/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2020/2/A/tpqOWNQ1a6wQo6MRIDeQ/gtav.jpeg"
-    },
-    {   
-        id: 9,
-        nome: "The Legend of Zelda: Breath of the Wild",
-        imagem: "https://s2.glbimg.com/cMN7MrLpoTZV1GMUBYdgL30bVv8=/0x0:2560x1440/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2020/O/S/BPIs44QMm6D82ZbljLNQ/zelda.jpeg"
-    },
-    {   
-        id: 10,
-        nome: "Tony Hawk's Pro Skater 3 ",
-        imagem: "https://s2.glbimg.com/UAKsbIzwuDcE6ZzVTeggm41C01A=/0x0:1280x720/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/7/T/BpMzkKRnSh3RGxJaZfKQ/c0gwynkji2mcuvz410g8.jpg"
-    }
-];
 
 // Função responsável por filtrar apenas os filmes que possuem valores válidos, ou seja, não são null.
 const getJogosValidos = () => jogos.filter(Boolean);
@@ -77,7 +25,8 @@ app.get('/', (req, res) => {
 });
 
 //GET - /jogos - lista todos os jogos
-app.get('/jogos', (req, res) => {
+app.get('/jogos', async (req, res) => {
+    const jogos = await jogoSchema.find();
     res.json({jogos})// .json converte nosso array ou objeto para JSON
 });
 

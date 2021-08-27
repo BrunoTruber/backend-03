@@ -18,5 +18,5 @@ app.get('/filmes', async (req, res) => {
 
 
 app.listen(port, () => {
-    console.log(`server cool in http://localhost:${port}`)
+    console.log(`server cool in http://localhost:${port}`) 
 }); 

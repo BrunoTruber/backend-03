@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const filmeSchema = require('./models/filme');
 
 const app = express();
@@ -14,6 +13,9 @@ app.get('/filmes', async (req, res) => {
     const filmes = await filmeSchema.find();
     res.send(filmes);
 })
+
+
+
 
 app.listen(port, () => {
     console.log(`server cool in http://localhost:${port}`)

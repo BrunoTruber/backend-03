@@ -12,10 +12,10 @@ const port = 3000;
 // Função responsável por filtrar apenas os jogos que possuem valores válidos, ou seja, não são null.
 const getJogosValidos = () => jogo.filter(Boolean);
 
-// Função responsável por fazer o getById de filmes:
+// Função responsável por fazer o getById de jogos:
 const getJogoById = id => getJogosValidos().find(jogo => jogo.id === id); 
 
-// Função responsável por fazer o getByIndex de filmes:
+// Função responsável por fazer o getByIndex de jogos:
 const getJogoIndexById = id => getJogosValidos().findIndex(jogo => jogo.id === id)
 
 //CRUD - Create[POST] - Read[GET] - Update[PUT] - Delete[DELETE]
@@ -44,7 +44,7 @@ app.get('/jogos/:id', (req, res) => {
 });
 //POST - /jogos - criar um nvo jogo
 app.post('/jogos', (req, res) => {
-    const jogo = req.body;// Pego o JSON inteiro do body e insiro na const filme (desse lado é convertido para um obejto "normal" de js)
+    const jogo = req.body;// Pego o JSON inteiro do body e insiro na const jogo (desse lado é convertido para um obejto "normal" de js)
 
     if (!jogo || !jogo.nome || !jogo.imagem) {
         res.status(400).send({error: "Jogo invalido"});
@@ -56,14 +56,14 @@ app.post('/jogos', (req, res) => {
 
 
      // Testa se a lista não está vazia
-    if (jogo.length) {// Se o retorno de filmes.length for 0 faça...  (0 == false)
+    if (jogo.length) {// Se o retorno de jogos.length for 0 faça...  (0 == false)
         // Pegar o valor do ultimo id disponivel e somar + 1
         jogo.id = ultimoJogo.id + 1;
-        jogo.push(jogo);// Insere o objeto filme no array jogos
+        jogo.push(jogo);// Insere o objeto jogo no array jogos
     } else {
         // Caso a lista esteja vazia o valor de id é 1
         jogo.id = 1;
-        jogo.push(jogo);// Insere o objeto filme no array jogos
+        jogo.push(jogo);// Insere o objeto jogo no array jogos
     }
 
     res.status(201).send({jogo});

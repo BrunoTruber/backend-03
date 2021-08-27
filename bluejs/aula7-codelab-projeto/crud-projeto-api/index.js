@@ -1,22 +1,24 @@
 //baixar: npm i express
 const express = require("express");// importa o módulo express do nde_modules
+
 const jogoSchema = require('./models/jogo');
+
 const app = express();// cria o nosso objeto app, que vai poder utilizar tudo o que o express possui
 
 app.use(express.json());// Converte requisições e repostas para JSON (JavaScript Object Notation)
 
 const port = 3000;
 
-// Função responsável por filtrar apenas os filmes que possuem valores válidos, ou seja, não são null.
-const getJogosValidos = () => jogos.filter(Boolean);
+// Função responsável por filtrar apenas os jogos que possuem valores válidos, ou seja, não são null.
+const getJogosValidos = () => jogo.filter(Boolean);
 
 // Função responsável por fazer o getById de filmes:
 const getJogoById = id => getJogosValidos().find(jogo => jogo.id === id); 
 
 // Função responsável por fazer o getByIndex de filmes:
 const getJogoIndexById = id => getJogosValidos().findIndex(jogo => jogo.id === id)
-//CRUD - Create[POST] - Read[GET] - Update[PUT] - Delete[DELETE]
 
+//CRUD - Create[POST] - Read[GET] - Update[PUT] - Delete[DELETE]
 
 //GET- /home - pagina inicial index
 app.get('/', (req, res) => {
@@ -26,8 +28,8 @@ app.get('/', (req, res) => {
 
 //GET - /jogos - lista todos os jogos
 app.get('/jogos', async (req, res) => {
-    const jogos = await jogoSchema.find();
-    res.json({jogos})// .json converte nosso array ou objeto para JSON
+    const jogo = await jogoSchema.find();
+    res.send(jogo);
 });
 
 //GET - /jogos/{id} - lista os jogos pelo ID
@@ -38,7 +40,7 @@ app.get('/jogos/:id', (req, res) => {
 
     !jogo
     ? res.status(404).send({ error: "Isto non ecxiste!" })
-    : res.json({ jogo });
+    : res.send({ jogo });
 });
 //POST - /jogos - criar um nvo jogo
 app.post('/jogos', (req, res) => {
@@ -50,18 +52,18 @@ app.post('/jogos', (req, res) => {
     }
 
     // Pega o último elemento da lista jogos
-    const ultimoJogo = jogos[jogos.length - 1];
+    const ultimoJogo = jogo[jogo.length - 1];
 
 
      // Testa se a lista não está vazia
-    if (jogos.length) {// Se o retorno de filmes.length for 0 faça...  (0 == false)
+    if (jogo.length) {// Se o retorno de filmes.length for 0 faça...  (0 == false)
         // Pegar o valor do ultimo id disponivel e somar + 1
         jogo.id = ultimoJogo.id + 1;
-        jogos.push(jogo);// Insere o objeto filme no array jogos
+        jogo.push(jogo);// Insere o objeto filme no array jogos
     } else {
         // Caso a lista esteja vazia o valor de id é 1
         jogo.id = 1;
-        jogos.push(jogo);// Insere o objeto filme no array jogos
+        jogo.push(jogo);// Insere o objeto filme no array jogos
     }
 
     res.status(201).send({jogo});
@@ -70,7 +72,7 @@ app.post('/jogos', (req, res) => {
 
 //PUT - /jogos/{id} - alteração de um jogo pelo ID
 app.put('/jogos/:id', (req, res) => {
-    const id = req.params.id;
+    const id = +req.params.id;
 
      // findIndex retorna a posição do objeto dentro do array(jogos), caso não exista, retorna -1
     const jogoIndex = getJogoById(id)
@@ -96,7 +98,7 @@ app.put('/jogos/:id', (req, res) => {
     // Adiciona o id do jogo antigo no jogo novo:
     novoJogo.id = jogo.id
     // Insere o jogo novo, na posição encontrada findIndex, do array.
-    jogos[jogoIndex] = novoJogo
+    jogo[jogoIndex] = novoJogo
 
     res.send('Jogo alterado com sucesso')
 });
@@ -115,7 +117,7 @@ app.delete('/jogos/:id', (req, res) => {
 
 /* O Splice recebe dois parametros, a posição do valor a ser apagada e "quantos"
  valores quero apagar depois desse na minha lista, se eu quiser apagar apenas ele mesmo, colo o numero 1.*/
-    jogos.splice(JogoIndex, 1);
+    jogo.splice(JogoIndex, 1);
 
 
     res.send('Jogo apagado com sucesso')

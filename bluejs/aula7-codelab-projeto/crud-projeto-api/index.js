@@ -1,7 +1,7 @@
 //baixar: npm i express
 const express = require("express");// importa o módulo express do nde_modules
 
-const jogoSchema = require('./models/jogo');
+const jogoSchema = require('./models/Jogo');
 
 const app = express();// cria o nosso objeto app, que vai poder utilizar tudo o que o express possui
 
@@ -10,10 +10,10 @@ app.use(express.json());// Converte requisições e repostas para JSON (JavaScri
 const port = 3000;
 
 // Função responsável por filtrar apenas os jogos que possuem valores válidos, ou seja, não são null.
-const getJogosValidos = () => jogo.filter(Boolean);
+const getJogosValidos = () => jogoSchema.filter(Boolean);
 
 // Função responsável por fazer o getById de jogos:
-const getJogoById = id => getJogosValidos().find(jogo => jogo.id === id); 
+const getJogoById = async id => await jogoSchema.findById(id); 
 
 // Função responsável por fazer o getByIndex de jogos:
 const getJogoIndexById = id => getJogosValidos().findIndex(jogo => jogo.id === id)
@@ -33,10 +33,10 @@ app.get('/jogos', async (req, res) => {
 });
 
 //GET - /jogos/{id} - lista os jogos pelo ID
-app.get('/jogos/:id', (req, res) => {
+app.get('/jogos/:id', async (req, res) => {
      // Rota com recebimento de parametro (:id)
-    const id = +req.params.id;
-    const jogo = getJogoById(id)
+    const id = req.params.id;
+    const jogo = await getJogoById(id)
 
     !jogo
     ? res.status(404).send({ error: "Isto non ecxiste!" })

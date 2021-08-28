@@ -1,6 +1,6 @@
 //baixar: npm i express
 const express = require("express");// importa o módulo express do nde_modules
-
+const mongoose = require('./database');
 const jogoSchema = require('./models/Jogo');
 
 const app = express();// cria o nosso objeto app, que vai poder utilizar tudo o que o express possui
@@ -43,84 +43,67 @@ app.get('/jogos/:id', async (req, res) => {
     : res.send({ jogo });
 });
 //POST - /jogos - criar um nvo jogo
-app.post('/jogos', (req, res) => {
-    const jogo = req.body;// Pego o JSON inteiro do body e insiro na const jogo (desse lado é convertido para um obejto "normal" de js)
+app.post('/jogos', async (req, res) => {
+    const jogo = req.body;
 
-    if (!jogo || !jogo.nome || !jogo.imagem) {
-        res.status(400).send({error: "Jogo invalido"});
+    if(!jogo || !jogo.nome || !jogo.imagem){
+        res.status(400).send({error: 'jogo invalido'});
         return;
     }
 
-    // Pega o último elemento da lista jogos
-    const ultimoJogo = jogo[jogo.length - 1];
-
-
-     // Testa se a lista não está vazia
-    if (jogo.length) {// Se o retorno de jogos.length for 0 faça...  (0 == false)
-        // Pegar o valor do ultimo id disponivel e somar + 1
-        jogo.id = ultimoJogo.id + 1;
-        jogo.push(jogo);// Insere o objeto jogo no array jogos
-    } else {
-        // Caso a lista esteja vazia o valor de id é 1
-        jogo.id = 1;
-        jogo.push(jogo);// Insere o objeto jogo no array jogos
-    }
-
-    res.status(201).send({jogo});
-
+    const novoJogo = await new jogoSchema(jogo).save();
+    res.status(201).send({novoJogo});
 });
 
 //PUT - /jogos/{id} - alteração de um jogo pelo ID
-app.put('/jogos/:id', (req, res) => {
-    const id = +req.params.id;
+app.put('/jogos/:id', async (req, res) => {
+    const id = req.params.id;
 
-     // findIndex retorna a posição do objeto dentro do array(jogos), caso não exista, retorna -1
-    const jogoIndex = getJogoById(id)
-
-    // Validação para verificar se o jogo existe no array
-    if (jogoIndex < 0) {
-        res.status(404).send({error: "jogo não encontrado."});
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        res.status(422).send({error: 'id invalido'});
         return;
     }
 
-     // Pega o objeto JSON enviado no body da requisição
-    const novoJogo = req.body;
+    const jogo = await jogoSchema.findById(id);
 
-    // Valida se todos os campos necessários foram enviados.
-    if (!novoJogo || !novoJogo.nome || !novoJogo.imagem) {
-        res.status(400).send({ error: "jogo inválido!" });
+    if(!jogo){
+        res.status(404).send({erro: 'jogo nao encontrado'});
         return;
     }
 
-    // Procuro o jogo cadastrado no meu array, pelo id passado no parametro, e insiro o objeto inteiro, dentro da const jogo.
-    const jogo = getJogoById(id)
+    novoJogo = req.body;
 
-    // Adiciona o id do jogo antigo no jogo novo:
-    novoJogo.id = jogo.id
-    // Insere o jogo novo, na posição encontrada findIndex, do array.
-    jogo[jogoIndex] = novoJogo
+    if (!jogo || !jogo.nome || !jogo.imagem) {
+        res.status(400).send({ error: "jgo invalido" });
+        return;
+    }
 
-    res.send('Jogo alterado com sucesso')
+    //procura um document pelo id no banco e altera o docunt inteiro
+    await jogoSchema.findOneAndUpdate({_id: id}, novoJogo);
+    //busca o document atualizado no banco e insere na const filmeAtualizado
+    const jogoAtualizado = await jogoSchema.findById(id);
+
+    res.send({jogoAtualizado});
 });
 
 //DELETE - /jogos/{id} - apaga um jogo pelo ID
-app.delete('/jogos/:id', (req, res) => {
+app.delete('/jogos/:id', async (req, res) => {
     const id = req.params.id;
 
-    const JogoIndex = getJogoIndexById(id)
-
-    if (JogoIndex < 0) {
-      res.status(404).send({error: 'jogo nao encontrado'});
-      return;
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        res.status(422).send({error: 'id invalido'});
+        return;
     }
 
+    const jogo = await jogoSchema.findById(id);
 
-/* O Splice recebe dois parametros, a posição do valor a ser apagada e "quantos"
- valores quero apagar depois desse na minha lista, se eu quiser apagar apenas ele mesmo, colo o numero 1.*/
-    jogo.splice(JogoIndex, 1);
+    if(!jogo){
+        res.status(404).send({erro: 'jogo nao encontrado'});
+        return;
+    }
 
-
-    res.send('Jogo apagado com sucesso')
+    await jogoSchema.findByIdAndDelete(id);
+    res.send({message: 'jogo excluido'});
 });
 
 /* 

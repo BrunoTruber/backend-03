@@ -60,7 +60,8 @@ require("dotenv").config();
 		const personagem = await getPersonagemById(id);
 		res.send(personagem);
 	});
-
+    
+    // [POST] postPersonagem - criar personagenm
 	app.post("/personagens", async (req, res) => {
 		const objeto = req.body;
 

@@ -1,7 +1,6 @@
 {
-  "name": "teste",
+  "name": "aula11-integracao-front-e-back",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index",
@@ -16,5 +15,6 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
-  }
+  },
+  "description": ""
 }

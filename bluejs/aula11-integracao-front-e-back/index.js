@@ -117,6 +117,7 @@ require("dotenv").config();
 			//se acontecer algum erro no mongodb, cai na seguinte validação
 			if(result.modifiedCount !==1){
 				res.send('ocorreu um erro ao atualizar o personagem')
+				return;
 			}
 	});
 

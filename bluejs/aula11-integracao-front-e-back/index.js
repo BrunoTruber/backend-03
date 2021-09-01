@@ -7,12 +7,13 @@ require("dotenv").config();
 	const dbUser = process.env.DB_USER;
 	const dbSenha = process.env.DB_SENHA;
 	const dbName = process.env.DB_NAME;
+	const dbChar = process.env.DB_CHAR;
 
 	const app = express();
 	app.use(express.json());
 
 	const port = process.env.PORT || 3000;
-	const connectionString = `mongodb+srv://${dbUser}:${dbSenha}@cluster0.d39pv.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+	const connectionString = `mongodb+srv://${dbUser}:${dbSenha}@cluster0.${dbChar}.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 
 	const options = {
 		useUnifiedTopology: true,
@@ -72,9 +73,11 @@ require("dotenv").config();
 			return;
 		}
 
-		const insertCount = await personagens.insertOne(objeto);
+		const result = await personagens.insertOne(objeto);
 
-		if (!insertCount) {
+		console.log(result)
+
+		if (result.acknowledged == false) {
 			res.send("Ocorreu um erro");
 			return;
 		}
@@ -86,16 +89,35 @@ require("dotenv").config();
 	app.put("/personagens/:id", async (req, res) => {
 		const id = req.params.id;
 		const objeto = req.body;
-		res.send(
-			await personagens.updateOne(
-				{
-					_id: ObjectId(id),
-				},
-				{
-					$set: objeto,
-				}
-			)
-		);
+
+		if (!objeto || !objeto.nome || !objeto.imagemUrl) {
+			res.send(
+				"Requisição inválida, certifique-se que tenha os campos nome e imagemUrl"
+			);
+			return;
+		}
+
+		const quantidadePersonagens = await personagens.countDocuments({
+			_id: ObjectId(id),
+		});
+
+		if(quantidadePersonagens !== 1){
+			res.send('personagem nao encontrado')
+		}
+
+		const result = await personagens.updateOne(
+			{
+				_id: ObjectId(id),
+			},
+			{
+				$set: objeto,
+			}
+			);
+			//console.log(result)
+			//se acontecer algum erro no mongodb, cai na seguinte validação
+			if(result.modifiedCount !==1){
+				res.send('ocorreu um erro ao atualizar o personagem')
+			}
 	});
 
 	//[DELETE] Deleta um personagem
